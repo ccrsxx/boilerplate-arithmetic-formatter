@@ -1,14 +1,19 @@
-def arithmetic_arranger(problems):
+def arithmetic_arranger(problems, args=False):
 
     if len(problems) > 5:
         return 'Error: Too many problems.'
     
+    up = mid = down = solve = ''
+
     for i in range(len(problems)):
-        prob = problems[i].split()
+        problem = problems[i].split()
         
-        fn = prob[0]
-        op = prob[1]
-        sn = prob[2]
+        fn = problem[0]
+        op = problem[1]
+        sn = problem[2]
+
+        space = max(len(fn), len(sn))
+        end_space = '    '
 
         if '+' not in op and '-' not in op:
             return "Error: Operator must be '+' or '-'."
@@ -18,10 +23,25 @@ def arithmetic_arranger(problems):
 
         elif not fn.isdigit() or not sn.isdigit():
             return "Error: Numbers must only contain digits."
-        
 
+        else:
+            up += fn.rjust(space + 2) + end_space
+            mid += op + ' ' + sn.rjust(space) + end_space
+            down += ('-' * (space + 2)) + end_space
 
-# probs = ['1 + 2', '2 + 3', '3 + 4', '4 + 5', '5 + 6', '6 + 5']
-probs = ['1 + 2', '2 + 3', '3 + 4', '4 + 5', '5 + 6']
-check = arithmetic_arranger(probs)
-print(check)
+        if args:
+            fn, sn = int(fn), int(sn)
+
+            if op == '+':
+                sum = fn + sn
+            else:
+                sum = fn - sn
+
+            solve += str(sum).rjust(space + 2) + end_space
+
+    arranged_problems = up.rstrip() + '\n' + mid.rstrip()  + '\n' + down.rstrip() 
+    
+    if args:
+        arranged_problems = up.rstrip()  + '\n' + mid.rstrip()  + '\n' + down.rstrip()  + '\n' + solve.rstrip() 
+
+    return arranged_problems
