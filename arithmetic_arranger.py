@@ -1,47 +1,45 @@
-def arithmetic_arranger(problems, args=False):
+def arithmetic_arranger(numbers, solve=False):
 
-    if len(problems) > 5:
+    up = mid = line = down = ''
+
+    if len(numbers) > 5:
         return 'Error: Too many problems.'
     
-    up = mid = down = solve = ''
+    for num in numbers:
 
-    for i in range(len(problems)):
-        problem = problems[i].split()
-        
-        fn = problem[0]
-        op = problem[1]
-        sn = problem[2]
+        slice = num.split()
 
-        space = max(len(fn), len(sn))
-        end_space = '    '
+        fn = slice[0]
+        op = slice[1]
+        sn = slice[2]
 
         if '+' not in op and '-' not in op:
-            return "Error: Operator must be '+' or '-'."
+            return 'Error: Operator must be \'+\' or \'-\'.'
 
-        elif len(fn) > 4 or len(sn) > 4:
-            return "Error: Numbers cannot be more than four digits."
+        if not fn.isdigit() or not sn.isdigit():
+            return 'Error: Numbers must only contain digits.'
 
-        elif not fn.isdigit() or not sn.isdigit():
-            return "Error: Numbers must only contain digits."
+        if len(fn) > 4 or len(sn) > 4:
+            return 'Error: Numbers cannot be more than four digits.'
 
-        else:
-            up += fn.rjust(space + 2) + end_space
-            mid += op + ' ' + sn.rjust(space) + end_space
-            down += ('-' * (space + 2)) + end_space
+        space = max(len(fn), len(sn)) + 2
+        end_space = f'{"":4}'
 
-        if args:
+        up += f'{fn:>{space}}{end_space}'
+        mid += f'{op} {sn:>{space - 2}}{end_space}'
+        line += f'{"":-^{space}}{end_space}'
+
+        if solve:
             fn, sn = int(fn), int(sn)
 
             if op == '+':
-                sum = fn + sn
+                total = fn + sn
             else:
-                sum = fn - sn
+                total = fn - sn
 
-            solve += str(sum).rjust(space + 2) + end_space
+            down += f'{total:>{space}}{end_space}'
 
-    arranged_problems = up.rstrip() + '\n' + mid.rstrip()  + '\n' + down.rstrip() 
-    
-    if args:
-        arranged_problems = up.rstrip()  + '\n' + mid.rstrip()  + '\n' + down.rstrip()  + '\n' + solve.rstrip() 
+    if solve:
+        return f'{up.rstrip()}\n{mid.rstrip()}\n{line.rstrip()}\n{down.rstrip()}'
 
-    return arranged_problems
+    return f'{up.rstrip()}\n{mid.rstrip()}\n{line.rstrip()}'
